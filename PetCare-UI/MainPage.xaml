@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PetCare_UI.MainPage">
+
+
+    <ContentPage.MenuBarItems>
+        <MenuBarItem Text="Menu">
+            <MenuFlyoutItem Text="New Game" Clicked="OnNewGameClicked" />
+            <MenuFlyoutItem Text="Save" Clicked="OnSaveClicked" />
+            <MenuFlyoutItem Text="Load" Clicked="OnLoadClicked" />
+            <MenuFlyoutItem Text="Exit" Clicked="OnExitClicked" />
+        </MenuBarItem>
+    </ContentPage.MenuBarItems>
+
+    <ScrollView>
+        <!-- Background -->
+        <VerticalStackLayout
+            Padding="10,10" 
+            Spacing="25"
+            BackgroundColor="#2F362F">
+            <!-- Log -->
+            <Frame
+                BorderColor="Black"
+                CornerRadius="5"
+                Padding="10"
+                BackgroundColor="#D9D3C6"
+                MinimumWidthRequest="250"
+                MinimumHeightRequest="360"
+                HasShadow="False">
+                <VerticalStackLayout>
+        
+
+                <Label
+                Text="Log"
+                Style="{StaticResource Headline}"
+                SemanticProperties.HeadingLevel="Level1" />
+                    <Frame 
+                    BorderColor="Black"
+                    CornerRadius="5"
+                    BackgroundColor="Transparent"
+                        Padding="0">
+                        <ScrollView 
+                            HeightRequest="275"
+                            WidthRequest="360"
+                            Margin="0">
+                            <VerticalStackLayout  x:Name="LogBox">
+                                <Label    
+                                x:Name="log"
+                                Text="Stuff on line1&#x0a;Stuff on line 2&#x0a;Stuff on line1&#x0a;Stuff on line 2&#x0a;Stuff on line1&#x0a;Stuff on line 2&#x0a;Stuff on line1&#x0a;Stuff on line 2&#x0a;Stuff on line1&#x0a;Stuff on line 2&#x0a;Stuff on line1&#x0a;Stuff on line 2&#x0a;Stuff on line1&#x0a;Stuff on line 2&#x0a;Stuff on line1&#x0a;Stuff on line 2&#x0a;Stuff on line1&#x0a;Stuff on line 2&#x0a;"
+                                SemanticProperties.HeadingLevel="Level3" />
+                            </VerticalStackLayout>
+                        </ScrollView>
+                    </Frame>
+
+                </VerticalStackLayout>
+            </Frame>
+            <!-- Bottom Boxes -->
+            <HorizontalStackLayout
+            Padding="0,-15"
+            Spacing="10">
+                <!-- Left Box -->
+                <Frame
+                    BorderColor="Black"
+                    CornerRadius="5"
+                    Padding="10"
+                    BackgroundColor="#D9D3C6"
+                    MinimumWidthRequest="200"
+                    MinimumHeightRequest="420"
+                    MaximumHeightRequest="420"
+                    HasShadow="False">
+                    <VerticalStackLayout
+                        Spacing="10">
+                        
+                        
+                        <!-- Actions section -->
+                        <Label
+                            Text="Actions"
+                            SemanticProperties.HeadingLevel="Level2" />
+                        <!-- Actions content -->
+                        <Frame 
+                            BorderColor="Black"
+                            CornerRadius="5"
+                            BackgroundColor="Transparent"
+                            Padding="0">
+                        <ScrollView 
+                            HeightRequest="150"
+                            WidthRequest="150"
+                            Margin="10"
+
+>
+                            <VerticalStackLayout 
+                            x:Name="ActionBox">
+
+                            </VerticalStackLayout>
+                        </ScrollView>
+                        </Frame>
+                        <!-- Stats section -->
+                        <Label
+                            Text="Stats"
+                            SemanticProperties.HeadingLevel="Level2" />
+                        <VerticalStackLayout
+                                Padding="0,175"
+                                Spacing="10">
+                            <!-- Stats content -->
+                            <ProgressBar x:Name="HealthBar" Progress="0.65" ProgressColor="Orange"/>
+                            <ProgressBar x:Name="HappyBar" Progress="0.35" ProgressColor="Orange"/>
+                            <ProgressBar x:Name="FoodBar" Progress="0.75" ProgressColor="Orange"/>
+                        </VerticalStackLayout>
+
+                    </VerticalStackLayout>
+                        
+                </Frame>
+                <!-- Right Box -->
+                <Frame
+                    BorderColor="Black"
+                    CornerRadius="5"
+                    Padding="10"
+                    BackgroundColor="#D9D3C6"
+                    MinimumWidthRequest="180"
+                    MaximumWidthRequest="180"
+                    MinimumHeightRequest="420"
+                    MaximumHeightRequest="420"
+                    HasShadow="False">
+            <VerticalStackLayout
+                    Padding="20,0"
+                    Spacing="10">
+                    <Label
+                        x:Name="weekLabel"
+                        Text="Week&#x0a;X"
+                        HorizontalTextAlignment="Center"
+                        SemanticProperties.HeadingLevel="Level2" />
+                        <Button x:Name="nextweekbtn" Text="Next Week" Clicked="OnNextWeekClicked"></Button>
+                        <Button x:Name="savebtn" Text="Save Game"></Button>
+                        <Button x:Name="loadbtn" Text="Load Game"></Button>
+                        <Button x:Name="newgamebtn" Text="New Game"></Button>
+                    </VerticalStackLayout>
+                </Frame>
+            </HorizontalStackLayout>
+                
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
