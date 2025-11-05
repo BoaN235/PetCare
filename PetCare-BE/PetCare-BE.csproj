@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PetCare-AI\PetCare-AI.csproj" />
-	  <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+	  <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.120" />
   </ItemGroup>
 
 </Project>
