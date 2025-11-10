@@ -1,59 +1,101 @@
-﻿namespace PetCare_BE
+﻿using PetCare.Core;
+using System.Diagnostics;
+
+namespace PetCare.BE;
+
+public class Backend : IBackend
 {
-    using Microsoft.Maui.Controls;
-    using PetCare_AI;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Xml.Linq;
-    public class Backend
+    public Backend(IGameState gameState, IAiModel aiModel, IGameLog gameLog)
     {
-        private Pet pet = new Pet("Gizmo", "Cat");
-        int count = 0;
-        private AiModel ai = new AiModel();
-        public PetGameState gamestate;
-        public PlayerAction[] actions = new PlayerAction[]
+        GameState = gameState ?? throw new ArgumentNullException(nameof(gameState));
+        AiModel = aiModel ?? throw new ArgumentNullException(nameof(aiModel));
+        GameLog = gameLog ?? throw new ArgumentNullException(nameof(gameLog));
+    }
 
+    public PlayerAction[] Actions { get; } = [
+        new PlayerAction("Feed the pet", "Feeding the Pet", -5, 5, 25, -20),
+        new PlayerAction("Play with the pet", "Playing with the pet", -5, 15, -10, 0),
+        new PlayerAction("Going to work", "Going to work today", -5, -20, -5, 50),
+        new PlayerAction("Take the pet to the vet", "Taking the pet to the vet", 35, -25, -5, -40),
+        new PlayerAction("Clean the pet's space", "Cleaning the pet's living area", 10, 5, -10, -5),
+        new PlayerAction("Teach the pet a trick", "Training the pet", 5, 15, -10, -5),
+        new PlayerAction("Take a walk together", "Going for a walk with the pet", 10, 20, -15, -5),
+        new PlayerAction("Give the pet a bath", "Bathing the pet", 15, 10, -5, -10),
+        new PlayerAction("Visit the pet park", "Playing at the pet park", 10, 25, -20, -15),
+        new PlayerAction("Buy a toy", "Getting a new toy for the pet", 0, 20, -5, -25)
+    ];
+
+    public IGameState GameState { get; init; }
+    public IAiModel AiModel { get; init; }
+    public IGameLog GameLog { get; init; }
+
+
+    public async Task Initialize()
+    {
+        await LoadGame();
+    }
+
+    public async Task SaveGame()
+    {
+        await GameLog.Export();
+        await GameState.Export();
+    }
+
+
+    public async Task LoadGame()
+    {
+        await GameLog.Import();
+        await GameState.Import();
+    }
+
+    public async Task<bool> NewGame()
+    {
+        await GameLog.Clear();
+        await GameState.Clear();
+
+        GameState.Pet = new Pet("Gizmo", "Cat");
+        GameState.Week = 1;
+
+        await SaveGame();
+
+        return true;
+    }
+
+    public void createPet(string name, string type)
+    {
+        GameState.Pet = new Pet(name, type);
+    }
+
+    public bool ExitGame()
+    {
+        return true;
+    }
+
+    public async void RunAi(ChatIdEnum chatIdEnum, string prompt)
+    {
+        // Run AI processing in background
+        Debug.Write("Running AI");
+        await Task.Run(async () =>
         {
-            new PlayerAction("Feed the pet", 0 ,1,1,1,1),
-            new PlayerAction("Play with the pet", 1 ,1,1,1,1),
-            new PlayerAction("Take the pet for a walk", 2 ,1,1,1,1),
-            new PlayerAction("Put the pet to sleep", 3 ,1,1,1,1)
-        };
+            var result = await AiModel.RunModel(chatIdEnum, prompt);
+            GameLog.Add(result.Message);
+            Debug.Write("Done Running AI");
+        });
 
-        public Backend()
+    }
+
+    public async Task PerformAction(PlayerAction action)
+    {
+        // Run AI processing in background
+        GameState.Week++;
+        
+        Debug.Write("Running AI for " + action.Text);
+        await Task.Run(async () =>
         {
-            gamestate = new PetGameState();
-            ai.InitModel();
-            // RefreshChat();
-        }
-
-        //private async void RunAi(object sender, EventArgs e)
-        //{
-
-        //    string input = "hi";
-
-        //    // Run AI processing in background
-        //    await Task.Run(async () =>
-        //    {
-        //        //await ai.RunModel(input);
-        //    });
-
-        //    // Update UI on main thread after model finishes
-        //    MainThread.BeginInvokeOnMainThread(() =>
-        //    {
-        //        RefreshChat();
-        //    });
-        //}
-
-        //private void RefreshChat()
-        //{
-        //    List<string> Text = new List<string> { "Apple", "Banana" };
-        //    foreach (var m in ai.chatHistory.Messages)
-        //    {
-        //        Text.Add($"{m.AuthorRole}: {m.Content}&#x0a;");
-        //    }
-        //}
+            var result = await AiModel.RunModel(ChatIdEnum.GameMessageLog, action.Text);
+            //GameLog.Add(result.Message);
+            Debug.Write("Done Running AI");
+        });
+        GameState.Pet.StatsChange(action);
     }
 }

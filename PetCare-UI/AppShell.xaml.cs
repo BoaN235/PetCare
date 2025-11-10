@@ -1,10 +1,9 @@
-﻿namespace PetCare_UI
+﻿namespace PetCare.UI;
+
+public partial class AppShell : Shell
 {
-    public partial class AppShell : Shell
+    public AppShell()
     {
-        public AppShell()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

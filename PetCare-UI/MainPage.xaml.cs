@@ -1,86 +1,167 @@
-﻿using Microsoft.Maui.Controls;
-using Microsoft.Maui.Controls.Shapes;
-using PetCare_BE;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Microsoft.Maui.Controls.Shapes;
+using PetCare.BE;
+using PetCare.Core;
+using PetCare.UI.Behaviors;
+using System.Data;
+using System.Timers;
+using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Maui.Extensions;
+using CommunityToolkit.Maui;
 
+namespace PetCare.UI;
 
-namespace PetCare_UI
+public partial class MainPage : ContentPage
 {
-    public partial class MainPage : ContentPage
+    private IBackend _backend { get; }
+    private readonly DebounceClickHandler _debouncer = new DebounceClickHandler(1000);
+    private System.Timers.Timer _timer;
+    private PlayerAction _selectedAction;
+    public MainPage(IBackend backend)
     {
-        int count = 0;
-        Backend BackendRef;
-        PetGameState gamestate;
+        _backend = backend;
 
-        public MainPage()
+        InitializeComponent();
+
+
+        _timer = new System.Timers.Timer(500); // 0.5 second
+        _timer.Elapsed += OnTimerElapsed;
+        _timer.AutoReset = true;
+        _timer.Start();
+
+        UpdateScreen();
+    }
+
+    private void OnTimerElapsed(object sender, ElapsedEventArgs e)
+    {
+        // Update UI on the main thread
+        MainThread.BeginInvokeOnMainThread(() =>
         {
-            InitializeComponent();
-            BackendRef = new Backend();
-            gamestate = BackendRef.gamestate;
+            RefreshLog();
+        });
+    }
 
-            UpdateScreen();
-        }
+    private void DeleteActions()
+    {
+        ActionBox.Children.Clear();
+    }
 
-        public void UpdateLog(string log_text)
+    public void LoadActions(PlayerAction[] actions)
+    {
+        DeleteActions();
+        foreach (PlayerAction action in actions) 
         {
-            log.Text = log_text;
-        }
-
-        private void DeleteActions()
-        {
-            ActionBox.Children.Clear();
-        }
-
-        public void LoadActions(PlayerAction[] actions)
-        {
-            DeleteActions();
-            foreach (PlayerAction action in actions) 
+            var btn = new Button
             {
-                ActionBox.Children.Add(new Label
+                Text = action.Text
+            };
+            btn.Clicked += async (s, e) =>
+            {
+                await _debouncer.Handle(async () =>
                 {
-                    Text = action.text
+                    var act = _backend.Actions.SingleOrDefault(a => a.Text == action.Text);
+                    DisplayPopupButtonClicked(act);
+                    UpdateScreen();
                 });
-                ActionBox.Children.Add(new Button
-                {
-                    Text = "select"
-                });
-            }
+            };
+            ActionBox.Children.Add(btn);
         }
+    }
 
-        public void UpdateScreen()
-        {             
-            weekLabel.Text = $"Week: \n {gamestate.week}";
-            LoadActions(BackendRef.actions);
-        }
+    public void RefreshLog()
+    {
+        log.Text = _backend.GameLog.GetLogText();
+    }
 
-        private void OnNextWeekClicked(object? sender, EventArgs e)
+    public void Update_stats()
+    {
+        HealthBar.Progress = _backend.GameState.Pet.Health/100.0;
+        HappyBar.Progress = _backend.GameState.Pet.Happiness / 100.0;
+        HungerBar.Progress = _backend.GameState.Pet.Hunger / 100.0;
+        MoneyLabel.Text = $"${_backend.GameState.Pet.Money}";
+    }
+
+    public void UpdateScreen()
+    {             
+        weekLabel.Text = $"Day: \n {_backend.GameState.Week}";
+        LoadActions(_backend.Actions);
+        Update_stats();
+        RefreshLog();
+    }
+
+    private void OnNextWeekClicked(object? sender, EventArgs e)
+    {
+        if (_selectedAction != null) 
         {
-            gamestate.week += 1;
+            _backend.PerformAction(_selectedAction);
+        }
+        _backend.GameState.Week += 1;
+        UpdateScreen();
+    }
+
+    private async void OnNewGameClicked(object? sender, EventArgs e)
+    {
+        await _debouncer.Handle(async () =>
+        {
+            await _backend.NewGame();
             UpdateScreen();
-        }
+        });
+    }
 
-        private void OnNewGameClicked(object? sender, EventArgs e)
+    private async void OnAiChatClciked(object? sender, EventArgs e)
+    {
+        await _debouncer.Handle(async () =>
         {
-            gamestate.NewGame();
-        }
+            await _backend.AiModel.RunModel(ChatIdEnum.UserChat, ChatInput.Text);
+            ChatInput.Text = string.Empty;
+        });
+        UpdateScreen();
+    }
 
-        private void OnSaveClicked(object? sender, EventArgs e)
+    async void DisplayPopupButtonClicked(PlayerAction action)
+    {
+        _selectedAction = action;
+
+        var content = new Border
         {
-            gamestate.SaveGame();
-        }
+            Background = Colors.White,
+            Stroke = Colors.Gray,
+            StrokeThickness = 2,
+            StrokeShape = new RoundRectangle
+            {
+                CornerRadius = new CornerRadius(20)
+            },
+            Padding = 30,
+            Content = new Label
+            {
+                Text = $"Health: {_selectedAction.HealthChange}\nMood: {_selectedAction.HappinessChange}\nHunger: {_selectedAction.HungerChange}\nMoney: {_selectedAction.MoneyChange}",
+                TextColor = Colors.Black
+            }
+        };
 
-        private void OnLoadClicked(object? sender, EventArgs e)
+        await this.ShowPopupAsync(content, new PopupOptions
         {
-            gamestate.LoadGame();
-        }
+            CanBeDismissedByTappingOutsideOfPopup = true,
+            PageOverlayColor = Colors.Black.MultiplyAlpha(0.4f)
+        });
+    }
 
-        private void OnExitClicked(object? sender, EventArgs e)
+
+    private async void OnSaveClicked(object? sender, EventArgs e)
+    {
+        await _debouncer.Handle(async () =>
         {
-            gamestate.ExitGame();
+            await _backend.SaveGame();
+            UpdateScreen();
+        });
 
-        }
+    }
+
+    private async void OnLoadClicked(object? sender, EventArgs e)
+    {
+        await _debouncer.Handle(async () =>
+        {
+            await _backend.LoadGame();
+            UpdateScreen();
+        });
     }
 }

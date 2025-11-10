@@ -1,33 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PetCare.Core;
 
-namespace PetCare_BE
+namespace PetCare.BE;
+
+public class GameState : BaseDataObject<GameStateData>, IGameState
 {
-    public class PetGameState
+    public GameState() : base(typeof(GameState).Name + ".json")
     {
-        public int week = 1;
-        public bool SaveGame()
-        {
-            return true;
-        }
-
-        public bool LoadGame()
-        {
-            week = 1;
-            return true;
-        }
-
-        public bool NewGame()
-        {
-            return true;
-        }
-
-        public bool ExitGame()
-        {
-            return true;
-        }
     }
+
+    public int Week { get => DataObj.Week; set => DataObj.Week = value; }
+
+    public string PastActionPrompt { get => DataObj.PastActionPrompt; set => DataObj.PastActionPrompt = value; }
+
+    public string PastStatusPrompt { get => DataObj.PastStatusPrompt; set => DataObj.PastStatusPrompt = value; }
+
+    public Pet Pet { get => DataObj.Pet; set => DataObj.Pet = value; }
 }
+
+

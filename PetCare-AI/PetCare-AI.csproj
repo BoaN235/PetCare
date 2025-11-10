@@ -1,14 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <RootNamespace>PetCare_AI</RootNamespace>
+    <TargetFramework>net9.0</TargetFramework>
+    <RootNamespace>PetCare.AI</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="LLamaSharp" Version="0.25.0" />
+	<ProjectReference Include="..\PetCare-Core\PetCare-Core.csproj" />
     <PackageReference Include="LLamaSharp.Backend.Cpu.Android" Version="0.25.0" />
 	<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.120" />
   </ItemGroup>

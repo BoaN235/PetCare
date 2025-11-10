@@ -1,44 +1,62 @@
 ﻿using Microsoft.Extensions.Logging;
+using PetCare.AI;
+using PetCare.BE;
+using PetCare.Core;
 using System.Runtime.InteropServices;
+using CommunityToolkit.Maui; // Add this using if not present
+namespace PetCare.UI;
 
-namespace PetCare_UI
+public static class MauiProgram
 {
-    public static class MauiProgram
+    public static MauiApp CreateMauiApp()
     {
-        public static MauiApp CreateMauiApp()
+        // Set the DllImport resolver BEFORE any LLamaSharp usage
+        NativeLibrary.SetDllImportResolver(typeof(LLama.Native.NativeApi).Assembly, (libraryName, assembly, searchPath) =>
         {
-            // Set the DllImport resolver BEFORE any LLamaSharp usage
-            NativeLibrary.SetDllImportResolver(typeof(LLama.Native.NativeApi).Assembly, (libraryName, assembly, searchPath) =>
+            if (libraryName == "llama")
             {
-                if (libraryName == "llama")
+                IntPtr handle;
+                if (NativeLibrary.TryLoad("libllama.so", out handle))
                 {
-                    IntPtr handle;
-                    if (NativeLibrary.TryLoad("libllama.so", out handle))
-                    {
-                        return handle;
-                    }
-                    if (NativeLibrary.TryLoad("llama", out handle))
-                    {
-                        return handle;
-                    }
+                    return handle;
                 }
-                return IntPtr.Zero;
+                if (NativeLibrary.TryLoad("llama", out handle))
+                {
+                    return handle;
+                }
+            }
+            return IntPtr.Zero;
+        });
+
+        var builder = MauiApp.CreateBuilder();
+
+        builder
+            .UseMauiApp<App>()
+            .UseMauiCommunityToolkit() // <-- Chain this directly after .UseMauiApp<App>()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-            var builder = MauiApp.CreateBuilder();
-            builder
-                .UseMauiApp<App>()
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
+        // Configure logging via services
+        builder.Services.AddLogging(logging =>
+        {
+            logging.ClearProviders(); // Optional: clear default providers
+            logging.AddDebug();       // Add Debug provider
+            logging.SetMinimumLevel(LogLevel.Trace); // Log everything
+        });
+
+        builder.Services.AddSingleton<IGameState, GameState>();
+        builder.Services.AddSingleton<IGameLog, GameLog>();
+        builder.Services.AddSingleton<IAiModel, AiModel>();
+        builder.Services.AddSingleton<IBackend, Backend>();
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+        builder.Logging.AddDebug();
 #endif
 
-            return builder.Build();
-        }
+        return builder.Build();
+
     }
 }
