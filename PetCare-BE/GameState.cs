@@ -8,7 +8,7 @@ public class GameState : BaseDataObject<GameStateData>, IGameState
     {
     }
 
-    public int Week { get => DataObj.Week; set => DataObj.Week = value; }
+    public int Day { get => DataObj.Day; set => DataObj.Day = value; }
 
     public string PastActionPrompt { get => DataObj.PastActionPrompt; set => DataObj.PastActionPrompt = value; }
 

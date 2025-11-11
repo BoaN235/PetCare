@@ -1,69 +1,114 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- 
+    MainPage.xaml - Primary UI interface for PetCare virtual pet game
+    
+    This XAML file defines the main user interface for a virtual pet care game built with .NET MAUI.
+    The interface includes:
+    - Game control buttons (New Game, Load Game, Save Game)
+    - Interactive chat log with AI pet responses
+    - Action selection buttons for pet care activities
+    - Real-time pet statistics display (Health, Mood, Hunger, Money)
+    - Day progression system
+    
+    Layout Structure:
+    - ScrollView containing main Grid with 3 rows and 2 columns
+    - Row 0: Game controls header (spans both columns)
+    - Row 1: Chat log and AI interaction area (spans both columns)
+    - Row 2: Left column - Actions panel, Right column - Statistics panel
+    
+    Color Scheme:
+    - Primary background: #1C1F33 (dark blue-gray)
+    - Frame backgrounds: #0094ff and #2667FF (blue variations)
+    - Text colors: #ADD7F6 (light blue)
+    - Accent colors: #62c6f1, #87BFFF (blue tones)
+-->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PetCare.UI.MainPage">
 
-
+    <!-- Global styling resources for consistent UI appearance across all controls -->
     <ContentPage.Resources>
+        <!-- Default label styling - light blue text for readability on dark background -->
         <Style TargetType="Label">
             <Setter Property="TextColor" Value="#ADD7F6" />
         </Style>
+        
+        <!-- Button styling - dark blue background with light blue text and borders -->
         <Style TargetType="Button">
             <Setter Property="Background" Value="DarkBlue" />
             <Setter Property="TextColor" Value="#ADD7F6" />
             <Setter Property="BorderColor" Value="#62c6f1" />
             <Setter Property="LineBreakMode" Value="WordWrap" />
         </Style>
+        
+        <!-- Progress bar styling for pet statistics (Health, Mood, Hunger) -->
         <Style TargetType="ProgressBar">
             <Setter Property="ProgressColor" Value="#87BFFF" />
             <Setter Property="BackgroundColor" Value="Transparent" />
         </Style>
+        
+        <!-- Text entry field styling for user input -->
         <Style TargetType="Entry">
             <Setter Property="PlaceholderColor" Value="#ADD7F6" />
             <Setter Property="TextColor" Value="#ADD7F6" />
         </Style>
+        
+        <!-- Frame styling for content containers throughout the UI -->
         <Style TargetType="Frame">
             <Setter Property="Background" Value="#2667FF" />
             <Setter Property="BorderColor" Value="#3F8EFC" />
         </Style>
     </ContentPage.Resources>
 
+    <!-- Main scrollable container to handle overflow on smaller screens -->
     <ScrollView>
-        <!-- Background -->
+        <!-- Primary layout grid with dark background theme -->
         <Grid
             Padding="10,10" 
             BackgroundColor="#1C1F33">
             <Grid.RowDefinitions>
+                <!-- Header row for game controls - auto-sized based on content -->
                 <RowDefinition Height="Auto"/>
+                <!-- Main content row for chat log - takes up 2/3 of available space -->
                 <RowDefinition Height="2*"/>
+                <!-- Bottom row for actions and statistics - auto-sized -->
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
+                <!-- Left column for actions panel -->
                 <ColumnDefinition Width="*"/>
+                <!-- Right column for statistics panel -->
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-
+            <!-- HEADER SECTION: Game title and control buttons -->
+            <!-- Spans both columns in the top row for full-width header -->
             <Frame Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="5" Padding="10">
                 <VerticalStackLayout>
+                    <!-- Main game title with semantic heading for accessibility -->
                     <Label
-                Text="Pet Care GPT"
-                Style="{StaticResource Headline}"
-                TextColor="White"
-                SemanticProperties.HeadingLevel="Level1" />
-                    <HorizontalStackLayout
-                    Padding="2,2"
+                        Text="Pet Care GPT"
+                        Style="{StaticResource Headline}"
+                        TextColor="White"
+                        SemanticProperties.HeadingLevel="Level1" />
                     
-                    HorizontalOptions="Center">
+                    <!-- Horizontal button group for game state management -->
+                    <HorizontalStackLayout
+                        Padding="2,2"
+                        HorizontalOptions="Center">
+                        <!-- Start new game session - resets all pet data -->
                         <Button x:Name="newgamebtn" Text="New Game" Clicked="OnNewGameClicked" Margin="2,2"></Button>
+                        <!-- Load previously saved game state from device storage -->
                         <Button x:Name="loadbtn" Text="Load Game" Clicked="OnLoadClicked" Margin="2,2"></Button>
+                        <!-- Save current game state to device storage -->
                         <Button x:Name="savebtn" Text="Save Game" Clicked="OnSaveClicked" Margin="2,2"></Button>
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
             </Frame>
 
-            <!-- Log -->
-            <Frame  Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
+            <!-- CHAT LOG SECTION: AI interaction and message history -->
+            <!-- Spans both columns for full-width chat interface -->
+            <Frame Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
                 BorderColor="#62c6f1"
                 CornerRadius="5"
                 Padding="10"
@@ -71,145 +116,169 @@
                 HasShadow="False" Margin="5">
                 <Grid>
                     <Grid.RowDefinitions>
+                        <!-- Chat history display area - takes most of the space -->
                         <RowDefinition Height="*"/>
+                        <!-- Input area for user messages - auto-sized -->
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
+                    
+                    <!-- Scrollable chat log container with height limitation -->
                     <Frame 
                         BorderColor="#62c6f1"
                         CornerRadius="5"
                         BackgroundColor="Transparent"
                         Padding="0"
                         Grid.Row="0">
+                        <!-- Limited height scroll view to prevent excessive scrolling -->
                         <ScrollView MaximumHeightRequest="300">
-                            <VerticalStackLayout  x:Name="LogBox" Margin="5">
+                            <!-- Container for dynamically added chat messages -->
+                            <VerticalStackLayout x:Name="LogBox" Margin="5">
+                                <!-- Initial chat message - will be replaced by dynamic content -->
                                 <Label    
-                                x:Name="log"
-                                Text="Hi"
-                                SemanticProperties.HeadingLevel="Level3" />
-
+                                    x:Name="log"
+                                    Text="Hi"
+                                    SemanticProperties.HeadingLevel="Level3" />
                             </VerticalStackLayout>
                         </ScrollView>
                     </Frame>
 
-
+                    <!-- Chat input section with text entry and send button -->
                     <Grid Grid.Row="1" Padding="7,7">
                         <Grid.ColumnDefinitions>
+                            <!-- Text input field - takes most of the width -->
                             <ColumnDefinition Width="*"/>
+                            <!-- Send button - auto-sized -->
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                     
+                        <!-- Horizontal scrollable text input for long messages -->
+                        <ScrollView Orientation="Horizontal" Grid.Column="0">
+                            <Entry
+                                x:Name="ChatInput"
+                                Placeholder="Enter your message to the AI here">
+                            </Entry>
+                        </ScrollView>
 
-                    <ScrollView Orientation="Horizontal" Grid.Column="0">
-                        <Entry
-                x:Name="ChatInput"
-                Placeholder="Enter your message to the AI here">
-                        </Entry>
-                    </ScrollView>
-
-                    <Button
+                        <!-- Send message button with emoji icon -->
+                        <Button
                             Grid.Column="1" Grid.Row="1"
                             Text="🗣️"
                             Clicked="OnAiChatClicked">
-                    </Button>
+                        </Button>
                     </Grid>
                 </Grid>
             </Frame>
 
+            <!-- LEFT PANEL: Actions selection area -->
+            <!-- Available pet care actions that player can choose from -->
+            <Frame Grid.Column="0" Grid.Row="2" 
+                BorderColor="#62c6f1"
+                CornerRadius="5"
+                Padding="10"
+                BackgroundColor="#0094ff"
+                HasShadow="False" Margin="5">
+                <VerticalStackLayout Spacing="10">
 
-            <!-- Left Box -->
-            <Frame     Grid.Column="0" Grid.Row="2" 
-                    BorderColor="#62c6f1"
-                    CornerRadius="5"
-                    Padding="10"
-                    BackgroundColor="#0094ff"
-                    HasShadow="False" Margin="5">
-                <VerticalStackLayout
-                        Spacing="10">
-
-
-                    <!-- Actions section -->
+                    <!-- Actions section header -->
                     <Label
-                            Text="Actions:"
-                            SemanticProperties.HeadingLevel="Level2" FontSize="Large"/>
-                    <!-- Actions content -->
+                        Text="Actions:"
+                        SemanticProperties.HeadingLevel="Level2" FontSize="Large"/>
+                    
+                    <!-- Scrollable container for action buttons -->
+                    <!-- Actions are dynamically populated from Backend.Actions array -->
                     <Frame 
-                            BorderColor="#62c6f1"
-                            CornerRadius="5"
-                            BackgroundColor="Transparent"
-                            Padding="0">
+                        BorderColor="#62c6f1"
+                        CornerRadius="5"
+                        BackgroundColor="Transparent"
+                        Padding="0">
+                        <!-- Fixed height scroll area for consistent layout -->
                         <ScrollView 
                             HeightRequest="150"
                             WidthRequest="150"
-                            Margin="10"
-
->
+                            Margin="10">
+                            <!-- Container where action buttons are dynamically added -->
+                            <!-- Each button represents a pet care activity (feed, play, etc.) -->
                             <VerticalStackLayout 
-                            x:Name="ActionBox" Spacing="2">
-
+                                x:Name="ActionBox" Spacing="2">
                             </VerticalStackLayout>
                         </ScrollView>
                     </Frame>
+                    
+                    <!-- Reserved space for future stats or additional features -->
                     <VerticalStackLayout>
-                        <!-- Stats section -->
-
-
-                        
+                        <!-- Stats section placeholder -->
+                        <!-- ??? Future expansion area - may contain additional pet information -->
                     </VerticalStackLayout>
-
                 </VerticalStackLayout>
-
             </Frame>
 
-
-            <!-- Right Box -->
+            <!-- RIGHT PANEL: Pet statistics and game progression -->
+            <!-- Displays current pet status and day progression controls -->
             <Frame Grid.Column="1" Grid.Row="2" 
-        BorderColor="#62c6f1"
-        CornerRadius="5"
-        Padding="10"
-        BackgroundColor="#0094ff"
-        HasShadow="False" Margin="5">
+                BorderColor="#62c6f1"
+                CornerRadius="5"
+                Padding="10"
+                BackgroundColor="#0094ff"
+                HasShadow="False" Margin="5">
                 <Grid>
                     <Grid.RowDefinitions>
+                        <!-- Current day/Day display -->
                         <RowDefinition Height="Auto"/>
+                        <!-- Money display row -->
                         <RowDefinition Height="Auto"/>
+                        <!-- Health progress bar row -->
                         <RowDefinition Height="Auto"/>
+                        <!-- Mood progress bar row -->
                         <RowDefinition Height="Auto"/>
+                        <!-- Hunger progress bar row -->
                         <RowDefinition Height="Auto"/>
+                        <!-- Next day button row - fills remaining space -->
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
+                        <!-- Label column for stat names -->
                         <ColumnDefinition Width="Auto"/>
+                        <!-- Spacer column for visual separation -->
                         <ColumnDefinition Width="10"/>
+                        <!-- Value/progress bar column -->
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
+                    <!-- Current game day display -->
+                    <!-- Shows progression through the game timeline -->
                     <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
-                        x:Name="weekLabel"
-                        Text="Week&#x0a;X"
+                        x:Name="DayLabel"
+                        Text="Day&#x0a;X"
                         HorizontalTextAlignment="Center"
                         SemanticProperties.HeadingLevel="Level2" FontSize="Large" />
 
-
+                    <!-- Pet's money/currency display -->
                     <Label Text="Stats:" Grid.Row="1" Grid.Column="0" />
                     <Label Text="$X" x:Name="MoneyLabel" FontSize="12" Grid.Row="1" Grid.Column="2"/>
 
-
-
-                    <Label Text="Health" FontSize="12" Grid.Row="2" Grid.Column="0"  Margin="0, 5"/>
+                    <!-- Health status progress bar (0-100) -->
+                    <!-- Visual indicator of pet's physical well-being -->
+                    <Label Text="Health" FontSize="12" Grid.Row="2" Grid.Column="0" Margin="0, 5"/>
                     <ProgressBar x:Name="HealthBar" Progress="0.65" Grid.Row="2" Grid.Column="2" Margin="0, 5"/>
 
-                    <Label Text="Mood" FontSize="12" Grid.Row="3" Grid.Column="0"  Margin="0, 5"/>
-                    <ProgressBar x:Name="HappyBar" Progress="0.35" Grid.Row="3" Grid.Column="2"  Margin="0, 5"/>
+                    <!-- Mood/Happiness status progress bar (0-100) -->
+                    <!-- Visual indicator of pet's emotional state -->
+                    <Label Text="Mood" FontSize="12" Grid.Row="3" Grid.Column="0" Margin="0, 5"/>
+                    <ProgressBar x:Name="HappyBar" Progress="0.35" Grid.Row="3" Grid.Column="2" Margin="0, 5"/>
 
-                    <Label Text="Hunger" FontSize="12" Grid.Row="4" Grid.Column="0"  Margin="0, 5" />
-                    <ProgressBar x:Name="HungerBar" Progress="0.75"  Grid.Row="4" Grid.Column="2" />
+                    <!-- Hunger status progress bar (0-100) -->
+                    <!-- Visual indicator of pet's food needs -->
+                    <Label Text="Hunger" FontSize="12" Grid.Row="4" Grid.Column="0" Margin="0, 5" />
+                    <ProgressBar x:Name="HungerBar" Progress="0.75" Grid.Row="4" Grid.Column="2" />
 
-
-                    <Button x:Name="nextweekbtn" Text="Next Day" Clicked="OnNextWeekClicked" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" HorizontalOptions="Center" VerticalOptions="End"></Button>
-
+                    <!-- Day progression button -->
+                    <!-- Advances game time and applies selected action effects -->
+                    <Button x:Name="nextDaybtn" Text="Next Day" Clicked="OnNextDayClicked" 
+                            Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" 
+                            HorizontalOptions="Center" VerticalOptions="End">
+                    </Button>
                 </Grid>
             </Frame>
         </Grid>
     </ScrollView>
-
 </ContentPage>

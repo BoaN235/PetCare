@@ -3,7 +3,7 @@
 Here are some examples of inputs and outputs
 INPUT
 {
-  "Week": 1,
+  "Day": 1,
   "PastActionPrompt": "You brought {gameState.Pet.name} to the doctor",
   "PastStatusPrompt": "{gameState.Pet.name} was Ill",
   "Pet": {
@@ -15,15 +15,15 @@ INPUT
 }
 OUTPUT
 {
-    "Week": 2,
-    "WeekMsgs": [
-        "____Week 1____",
+    "Day": 2,
+    "DayMsgs": [
+        "____Day 1____",
         "{gameState.Pet.name} Fell ill"
         
     ],
     "Status": {
         "Name":"Ill",
-        "aiPrompt":"Last Week {gameState.Pet.name} was Ill",
+        "aiPrompt":"Last Day {gameState.Pet.name} was Ill",
         "healthChange": -20,
         "happyChange": 0,
         "HungerChange": 0,
