@@ -1,9 +1,10 @@
 ﻿using LLama;
 using LLama.Common;
 using LLama.Sampling;
-using System.Diagnostics;
-using PetCare.Core;
 using Microsoft.Extensions.Logging;
+using PetCare.Core;
+using System.Diagnostics;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace PetCare.AI;
 
@@ -96,13 +97,6 @@ public class AiModel : IAiModel, IDisposable
     Never break character. Never mention that you are an AI or part of a game. Your goal is to build a bond with the player and help them learn empathy, consistency, and responsibility through daily interactions.
     
     As part of the users input prompt, you will be told your mood and your health.
-    If you are unhappy since you are hungry or having not been played with then you may lower your mood by adding ---- into your response. 
-    If you are very happy then you can respond with ++++
-
-    If you get injured, say you get hurt playing fetch you may respond with ****. this will lower your heath a little. 
-    If you get healed by the doctor you can respond with !!!!
-
-    If any any point you are confused with the prompt then you may respond with ???? and the words I dont know.
     """";
 
     //As part of the users input prompt, you will be told your mood and your health.
@@ -175,7 +169,7 @@ public class AiModel : IAiModel, IDisposable
         //chatHistory.AddMessage(AuthorRole.System, "Transcript of a dialog, where the User interacts with an Assistant named Bob. Bob is helpful, kind, honest, good at writing, and never fails to answer the User's requests immediately and with precision. if bob cannot answer or is confused at any point fail with a friendly error message.");
         chatHistory.AddMessage(AuthorRole.System, _systemPrompt);
         chatHistory.AddMessage(AuthorRole.Assistant, $"Hi there! I'm {_gameState.Pet.Name}, your virtual {_gameState.Pet.Species}. I'm so excited to spend time with you! How are you doing today?");
-        chatHistory.AddMessage(AuthorRole.User, "I will feed you now.");
+        chatHistory.AddMessage(AuthorRole.User, "I will feed you now. You are Happy and content and very hungry.");
         chatHistory.AddMessage(AuthorRole.Assistant, "Yay! Thank you for feeding me! I feel so much better now. What shall we do next?");
         //chatHistory.AddMessage(AuthorRole.User, "Hello");
         // chatHistory.AddMessage(AuthorRole.Assistant, "Hello. How may I help you today?");
@@ -244,7 +238,7 @@ public class AiModel : IAiModel, IDisposable
                 Message = "Wait for me to finish my last response!",
             };
 
-        var userPrompt = userInput;// + $"  Your mood is {_gameState.Pet.Happiness} out of 100 your health is {_gameState.Pet.Health} out of 100 and your Hunger is {_gameState.Pet.Hunger} out of 100";
+        var userPrompt = userInput + _gameState.Pet.ToString();// + $"  Your mood is {_gameState.Pet.Happiness} out of 100 your health is {_gameState.Pet.Health} out of 100 and your Hunger is {_gameState.Pet.Hunger} out of 100";
 
         // Collect the assistant's full response
         string response = "";
@@ -257,6 +251,8 @@ public class AiModel : IAiModel, IDisposable
         letmespeak = false;
         response = response.Replace("User:", "");
         response = response.Replace("Assistant:", "");
+        userPrompt = userPrompt.Replace(_gameState.Pet.ToString(), "");
+        Debug.WriteLine("Hi");
         var aiResponse = new GameLogEntry
         {
             ChatId = chatId,
@@ -266,7 +262,7 @@ public class AiModel : IAiModel, IDisposable
         };
 
         this._gameLog.Add(aiResponse);
-
+        Debug.WriteLine("Hello");
         return aiResponse;
     }
 }

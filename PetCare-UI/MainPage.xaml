@@ -12,20 +12,41 @@
         </MenuBarItem>
     </ContentPage.MenuBarItems>
 
+    <ContentPage.Resources>
+        <Style TargetType="Label">
+            <Setter Property="TextColor" Value="White" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#0094ff" />
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="BorderColor" Value="#62c6f1" />
+        </Style>
+        <Style TargetType="ProgressBar">
+            <Setter Property="ProgressColor" Value="White" />
+            <Setter Property="BackgroundColor" Value="Transparent" />
+        </Style>
+        <Style TargetType="Entry">
+            <Setter Property="PlaceholderColor" Value="White" />
+            <Setter Property="TextColor" Value="White" />
+        </Style>
+    </ContentPage.Resources>
+
     <ScrollView>
         <!-- Background -->
         <VerticalStackLayout
             Padding="10,10" 
             Spacing="25"
-            BackgroundColor="#2F362F">
+            BackgroundColor="White">
+            
             <!-- Log -->
             <Frame
-                BorderColor="Black"
+                BorderColor="#62c6f1"
                 CornerRadius="5"
                 Padding="10"
-                BackgroundColor="#D9D3C6"
+                BackgroundColor="#0094ff"
                 MinimumWidthRequest="250"
-                MinimumHeightRequest="360"
+                MinimumHeightRequest="375"
+                MaximumHeightRequest="375"
                 HasShadow="False">
                 <VerticalStackLayout>
         
@@ -33,14 +54,15 @@
                 <Label
                 Text="Pet Care"
                 Style="{StaticResource Headline}"
+                TextColor="White"
                 SemanticProperties.HeadingLevel="Level1" />
                     <Frame 
-                    BorderColor="Black"
+                    BorderColor="#62c6f1"
                     CornerRadius="5"
                     BackgroundColor="Transparent"
                         Padding="0" >
                         <ScrollView 
-                            HeightRequest="275"
+                            HeightRequest="250"
                             WidthRequest="360" >
                             <VerticalStackLayout  x:Name="LogBox" Margin="5">
                                 <Label    
@@ -58,13 +80,13 @@
                             <Entry
                             x:Name="ChatInput"
                             MinimumWidthRequest="335"
-                            TranslationY="-5"
-                            >
+                            TranslationY="0" 
+                            Placeholder="Enter your message to the AI here">
                             </Entry>
                         </ScrollView>
 
                         <Button
-                            Clicked="OnAiChatClciked"
+                            Clicked="OnAiChatClicked"
                             MinimumHeightRequest="25"
                             MinimumWidthRequest="25"
                             MaximumHeightRequest="25"
@@ -82,13 +104,13 @@
             Spacing="10">
                 <!-- Left Box -->
                 <Frame
-                    BorderColor="Black"
+                    BorderColor="#62c6f1"
                     CornerRadius="5"
                     Padding="10"
-                    BackgroundColor="#D9D3C6"
+                    BackgroundColor="#0094ff"
                     MinimumWidthRequest="200"
-                    MinimumHeightRequest="420"
-                    MaximumHeightRequest="420"
+                    MinimumHeightRequest="410"
+                    MaximumHeightRequest="410"
                     HasShadow="False">
                     <VerticalStackLayout
                         Spacing="10">
@@ -100,7 +122,7 @@
                             SemanticProperties.HeadingLevel="Level2" />
                         <!-- Actions content -->
                         <Frame 
-                            BorderColor="Black"
+                            BorderColor="#62c6f1"
                             CornerRadius="5"
                             BackgroundColor="Transparent"
                             Padding="0">
@@ -122,7 +144,7 @@
 
                             <VerticalStackLayout
                                 Padding="0,10"
-                                Spacing="8">
+                                Spacing="7">
                             <!-- Stats content -->
                                 <HorizontalStackLayout>
                                     <Label Text="Stats:" />
@@ -130,11 +152,11 @@
                                 </HorizontalStackLayout>
                                
                                 <Label Text="Health" FontSize="12"/>
-                                <ProgressBar x:Name="HealthBar" Progress="0.65" ProgressColor="Blue"/>
-                                <Label Text="Health" FontSize="12"/>
-                                <ProgressBar x:Name="HappyBar" Progress="0.35" ProgressColor="Blue"/>
-                                <Label Text="Health" FontSize="12"/>
-                                <ProgressBar x:Name="HungerBar" Progress="0.75" ProgressColor="Blue"/>
+                                <ProgressBar x:Name="HealthBar" Progress="0.65" />
+                                <Label Text="Mood" FontSize="12"/>
+                                <ProgressBar x:Name="HappyBar" Progress="0.35" />
+                                <Label Text="Hunger" FontSize="12"/>
+                                <ProgressBar x:Name="HungerBar" Progress="0.75" />
                             </VerticalStackLayout>
                         </VerticalStackLayout>
 
@@ -143,14 +165,14 @@
                 </Frame>
                 <!-- Right Box -->
                 <Frame
-                    BorderColor="Black"
+                    BorderColor="#62c6f1"
                     CornerRadius="5"
                     Padding="10"
-                    BackgroundColor="#D9D3C6"
+                    BackgroundColor="#0094ff"
                     MinimumWidthRequest="180"
                     MaximumWidthRequest="180"
-                    MinimumHeightRequest="420"
-                    MaximumHeightRequest="420"
+                    MinimumHeightRequest="410"
+                    MaximumHeightRequest="410"
                     HasShadow="False">
             <VerticalStackLayout
                     Padding="20,0"
@@ -160,7 +182,7 @@
                         Text="Week&#x0a;X"
                         HorizontalTextAlignment="Center"
                         SemanticProperties.HeadingLevel="Level2" />
-                        <Button x:Name="nextweekbtn" Text="Next Week" Clicked="OnNextWeekClicked"></Button>
+                        <Button x:Name="nextweekbtn" Text="Next Day" Clicked="OnNextWeekClicked"></Button>
                         <Button x:Name="savebtn" Text="Save Game" Clicked="OnSaveClicked"></Button>
                         <Button x:Name="loadbtn" Text="Load Game" Clicked="OnLoadClicked"></Button>
                         <Button x:Name="newgamebtn" Text="New Game" Clicked="OnNewGameClicked"></Button>

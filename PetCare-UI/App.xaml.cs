@@ -15,6 +15,7 @@ public partial class App : Application
 
             var backEnd = serviceProvider.GetService<IBackend>() ?? throw new Exception("Backend cannot load");
             await backEnd.Initialize();
+            await backEnd.LoadGame();
         });
     }
 

@@ -13,10 +13,17 @@ public class GameLog : BaseDataObject<List<GameLogEntry>>, IGameLog
 
     public List<GameLogEntry> Entries => base.DataObj;
 
+    public void Add(string message, string userPrompt)
+    {
+        DataObj.Add(new GameLogEntry(message, userPrompt) { ChatId = ChatIdEnum.System });
+    }
+
+    // Implement missing IGameLogData.Add(string) method
     public void Add(string message)
     {
-        DataObj.Add(new GameLogEntry(message) { ChatId = ChatIdEnum.System });
+        DataObj.Add(new GameLogEntry(message, string.Empty) { ChatId = ChatIdEnum.System });
     }
+
     public void Add(GameLogEntry entry)
     {
         DataObj.Add(entry);
@@ -27,7 +34,7 @@ public class GameLog : BaseDataObject<List<GameLogEntry>>, IGameLog
         foreach (var entry in DataObj)
         {
             log_string.AppendLine("Owner: " + entry.UserPrompt + "\n");
-            log_string.AppendLine($"pet:" + entry.Message + "\n");
+            log_string.AppendLine($"Pet:" + entry.Message + "\n");
         }
         return log_string.ToString();
     }

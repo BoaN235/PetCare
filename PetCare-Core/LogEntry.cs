@@ -3,9 +3,10 @@
 public class GameLogEntry
 {
     public GameLogEntry() { }
-    public GameLogEntry(string Line)
+    public GameLogEntry(string Line, string userprompt)
     {
         Message = Line;
+        UserPrompt = userprompt;
     }
 
     public ChatIdEnum ChatId { get; set; }

@@ -55,6 +55,10 @@ public static class MauiProgram
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
+        if (Application.Current != null)
+        {
+            Application.Current.UserAppTheme = AppTheme.Light;
+        }
 
         return builder.Build();
 

@@ -1,4 +1,6 @@
-﻿namespace PetCare.Core;
+﻿using System.Xml.Linq;
+
+namespace PetCare.Core;
 
 public class Pet
 {
@@ -48,17 +50,17 @@ public class Pet
         Happiness += action.HappinessChange;
         Hunger += action.HungerChange;
         Money += action.MoneyChange;
-        if (Health > 100.0)
+        if (Health > 100)
         {
-            Health = 100.0;
+            Health = 100;
         }
-        if (Happiness > 100.0)
+        if (Happiness > 100)
         {
-            Happiness = 100.0;
+            Happiness = 100;
         }
-        if (Hunger > 100.0)
+        if (Hunger > 100)
         {
-            Hunger = 100.0;
+            Hunger = 100;
         }
     }
 
@@ -67,8 +69,9 @@ public class Pet
 
 
         var sb = new System.Text.StringBuilder();
-        sb.Append($"I am {Species} who is named {Name} aged {Age}. ");
-        sb.Append($"My health is at {Health}, my happiness is at {Happiness}, and my hunger is at {Hunger}. I am {HealthText} and {HappinessText} and {HungerText}.");
+        //sb.Append($"You are a {Species} who is named {Name} aged {Age}.");
+        //sb.Append($"Your health is at {Health}, Your happiness is at {Happiness}, and Your hunger is at {Hunger}. You are {HealthText} and {HappinessText} and {HungerText}.");
+        sb.Append($"You are {HealthText} and {HappinessText} and {HungerText}.");
         return sb.ToString();
 
     }

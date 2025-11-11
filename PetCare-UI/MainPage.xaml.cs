@@ -102,15 +102,19 @@ public partial class MainPage : ContentPage
     {
         await _debouncer.Handle(async () =>
         {
+            _backend.GameState.Pet = new Pet();
+            DisplayNewGamePopupButton();
             await _backend.NewGame();
             UpdateScreen();
         });
     }
 
-    private async void OnAiChatClciked(object? sender, EventArgs e)
+    private async void OnAiChatClicked(object? sender, EventArgs e)
     {
         await _debouncer.Handle(async () =>
         {
+            if (ChatInput.Text == null || ChatInput.Text.Trim() == string.Empty)
+                return;
             await _backend.AiModel.RunModel(ChatIdEnum.UserChat, ChatInput.Text);
             ChatInput.Text = string.Empty;
         });
@@ -141,6 +145,86 @@ public partial class MainPage : ContentPage
         await this.ShowPopupAsync(content, new PopupOptions
         {
             CanBeDismissedByTappingOutsideOfPopup = true,
+            PageOverlayColor = Colors.Black.MultiplyAlpha(0.4f)
+        });
+    }
+
+
+    async void DisplayNewGamePopupButton()
+    {
+
+        var submitButton = new Button
+        {
+            Text = "Submit",
+            TextColor = Colors.White,
+            BackgroundColor = Colors.MidnightBlue
+        };
+        // Create Entry fields to capture user input
+        var nameEntry = new Entry
+        {
+            Placeholder = "Pet Name",
+            TextColor = Colors.White
+        };
+
+        var speciesEntry = new Entry
+        {
+            Placeholder = "Pet Species",
+            TextColor = Colors.White
+        };
+
+        // Handle submit button click
+        submitButton.Clicked += async (s, e) =>
+        {
+            // Gather input data from Entry fields
+            string petName = nameEntry.Text?.Trim();
+            string petSpecies = speciesEntry.Text?.Trim();
+
+            // Validate and assign values
+            if (!string.IsNullOrEmpty(petName) && !string.IsNullOrEmpty(petSpecies))
+            {
+                _backend.GameState.Pet.Name = petName;
+                _backend.GameState.Pet.Species = petSpecies;
+            }
+
+            await this.ClosePopupAsync();
+        };
+
+        // Create the content layout
+        var content = new Border
+        {
+            Background = Colors.DarkBlue,
+            Stroke = Colors.Gray,
+            StrokeThickness = 2,
+            StrokeShape = new RoundRectangle
+            {
+                CornerRadius = new CornerRadius(20)
+            },
+            Padding = 30,
+            Content = new StackLayout
+            {
+                Children =
+        {
+            new Label
+            {
+                Text = "Enter Pet Name",
+                TextColor = Colors.White
+            },
+            nameEntry,
+            new Label
+            {
+                Text = "Enter Pet Species",
+                TextColor = Colors.White
+            },
+            speciesEntry,
+            submitButton
+        }
+            }
+        };
+
+
+        await this.ShowPopupAsync(content, new PopupOptions
+        {
+            CanBeDismissedByTappingOutsideOfPopup = false,
             PageOverlayColor = Colors.Black.MultiplyAlpha(0.4f)
         });
     }
