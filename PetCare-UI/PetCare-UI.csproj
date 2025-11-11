@@ -100,7 +100,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiIcon Include="Resources\AppIcon\cats.jpg" />
+	  <MauiAsset Include="Resources\AppIcon\cats.jpg" />
 	</ItemGroup>
 
 	<ItemGroup>

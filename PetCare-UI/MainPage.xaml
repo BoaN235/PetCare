@@ -4,124 +4,135 @@
              x:Class="PetCare.UI.MainPage">
 
 
-    <ContentPage.MenuBarItems>
-        <MenuBarItem Text="Menu">
-            <MenuFlyoutItem Text="New Game" Clicked="OnNewGameClicked" />
-            <MenuFlyoutItem Text="Save" Clicked="OnSaveClicked" />
-            <MenuFlyoutItem Text="Load" Clicked="OnLoadClicked" />
-        </MenuBarItem>
-    </ContentPage.MenuBarItems>
-
     <ContentPage.Resources>
         <Style TargetType="Label">
-            <Setter Property="TextColor" Value="White" />
+            <Setter Property="TextColor" Value="#ADD7F6" />
         </Style>
         <Style TargetType="Button">
-            <Setter Property="Background" Value="#0094ff" />
-            <Setter Property="TextColor" Value="White" />
+            <Setter Property="Background" Value="DarkBlue" />
+            <Setter Property="TextColor" Value="#ADD7F6" />
             <Setter Property="BorderColor" Value="#62c6f1" />
+            <Setter Property="LineBreakMode" Value="WordWrap" />
         </Style>
         <Style TargetType="ProgressBar">
-            <Setter Property="ProgressColor" Value="White" />
+            <Setter Property="ProgressColor" Value="#87BFFF" />
             <Setter Property="BackgroundColor" Value="Transparent" />
         </Style>
         <Style TargetType="Entry">
-            <Setter Property="PlaceholderColor" Value="White" />
-            <Setter Property="TextColor" Value="White" />
+            <Setter Property="PlaceholderColor" Value="#ADD7F6" />
+            <Setter Property="TextColor" Value="#ADD7F6" />
+        </Style>
+        <Style TargetType="Frame">
+            <Setter Property="Background" Value="#2667FF" />
+            <Setter Property="BorderColor" Value="#3F8EFC" />
         </Style>
     </ContentPage.Resources>
 
     <ScrollView>
         <!-- Background -->
-        <VerticalStackLayout
+        <Grid
             Padding="10,10" 
-            Spacing="25"
-            BackgroundColor="White">
-            
+            BackgroundColor="#1C1F33">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+
+            <Frame Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="5" Padding="10">
+                <VerticalStackLayout>
+                    <Label
+                Text="Pet Care GPT"
+                Style="{StaticResource Headline}"
+                TextColor="White"
+                SemanticProperties.HeadingLevel="Level1" />
+                    <HorizontalStackLayout
+                    Padding="2,2"
+                    
+                    HorizontalOptions="Center">
+                        <Button x:Name="newgamebtn" Text="New Game" Clicked="OnNewGameClicked" Margin="2,2"></Button>
+                        <Button x:Name="loadbtn" Text="Load Game" Clicked="OnLoadClicked" Margin="2,2"></Button>
+                        <Button x:Name="savebtn" Text="Save Game" Clicked="OnSaveClicked" Margin="2,2"></Button>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
             <!-- Log -->
-            <Frame
+            <Frame  Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
                 BorderColor="#62c6f1"
                 CornerRadius="5"
                 Padding="10"
                 BackgroundColor="#0094ff"
-                MinimumWidthRequest="250"
-                MinimumHeightRequest="375"
-                MaximumHeightRequest="375"
-                HasShadow="False">
-                <VerticalStackLayout>
-        
-
-                <Label
-                Text="Pet Care"
-                Style="{StaticResource Headline}"
-                TextColor="White"
-                SemanticProperties.HeadingLevel="Level1" />
+                HasShadow="False" Margin="5">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
                     <Frame 
-                    BorderColor="#62c6f1"
-                    CornerRadius="5"
-                    BackgroundColor="Transparent"
-                        Padding="0" >
-                        <ScrollView 
-                            HeightRequest="250"
-                            WidthRequest="360" >
+                        BorderColor="#62c6f1"
+                        CornerRadius="5"
+                        BackgroundColor="Transparent"
+                        Padding="0"
+                        Grid.Row="0">
+                        <ScrollView MaximumHeightRequest="300">
                             <VerticalStackLayout  x:Name="LogBox" Margin="5">
                                 <Label    
                                 x:Name="log"
-                                Text="Stuff on line1&#x0a;Stuff on line 2&#x0a;Stuff on line1&#x0a;Stuff on line 2&#x0a;Stuff on line1&#x0a;Stuff on line 2&#x0a;Stuff on line1&#x0a;Stuff on line 2&#x0a;Stuff on line1&#x0a;Stuff on line 2&#x0a;Stuff on line1&#x0a;Stuff on line 2&#x0a;Stuff on line1&#x0a;Stuff on line 2&#x0a;Stuff on line1&#x0a;Stuff on line 2&#x0a;Stuff on line1&#x0a;Stuff on line 2&#x0a;Stuff on line1&#x0a;Stuff on line 2&#x0a;"
+                                Text="Hi"
                                 SemanticProperties.HeadingLevel="Level3" />
 
                             </VerticalStackLayout>
                         </ScrollView>
                     </Frame>
-                    <HorizontalStackLayout>
-                        <ScrollView Orientation="Horizontal"
-                            HeightRequest="40"
-                            WidthRequest="335">
-                            <Entry
-                            x:Name="ChatInput"
-                            MinimumWidthRequest="335"
-                            TranslationY="0" 
-                            Placeholder="Enter your message to the AI here">
-                            </Entry>
-                        </ScrollView>
 
-                        <Button
-                            Clicked="OnAiChatClicked"
-                            MinimumHeightRequest="25"
-                            MinimumWidthRequest="25"
-                            MaximumHeightRequest="25"
-                            MaximumWidthRequest="25"
-                            TranslationY="5">
-                        </Button>
-                    </HorizontalStackLayout>
+
+                    <Grid Grid.Row="1" Padding="7,7">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
                     
 
-                </VerticalStackLayout>
+                    <ScrollView Orientation="Horizontal" Grid.Column="0">
+                        <Entry
+                x:Name="ChatInput"
+                Placeholder="Enter your message to the AI here">
+                        </Entry>
+                    </ScrollView>
+
+                    <Button
+                            Grid.Column="1" Grid.Row="1"
+                            Text="🗣️"
+                            Clicked="OnAiChatClicked">
+                    </Button>
+                    </Grid>
+                </Grid>
             </Frame>
-            <!-- Bottom Boxes -->
-            <HorizontalStackLayout
-            Padding="0,-15"
-            Spacing="10">
-                <!-- Left Box -->
-                <Frame
+
+
+            <!-- Left Box -->
+            <Frame     Grid.Column="0" Grid.Row="2" 
                     BorderColor="#62c6f1"
                     CornerRadius="5"
                     Padding="10"
                     BackgroundColor="#0094ff"
-                    MinimumWidthRequest="200"
-                    MinimumHeightRequest="410"
-                    MaximumHeightRequest="410"
-                    HasShadow="False">
-                    <VerticalStackLayout
+                    HasShadow="False" Margin="5">
+                <VerticalStackLayout
                         Spacing="10">
-                        
-                        
-                        <!-- Actions section -->
-                        <Label
+
+
+                    <!-- Actions section -->
+                    <Label
                             Text="Actions:"
-                            SemanticProperties.HeadingLevel="Level2" />
-                        <!-- Actions content -->
-                        <Frame 
+                            SemanticProperties.HeadingLevel="Level2" FontSize="Large"/>
+                    <!-- Actions content -->
+                    <Frame 
                             BorderColor="#62c6f1"
                             CornerRadius="5"
                             BackgroundColor="Transparent"
@@ -137,61 +148,68 @@
 
                             </VerticalStackLayout>
                         </ScrollView>
-                        </Frame>
-                        <VerticalStackLayout>
+                    </Frame>
+                    <VerticalStackLayout>
                         <!-- Stats section -->
+
+
                         
-
-                            <VerticalStackLayout
-                                Padding="0,10"
-                                Spacing="7">
-                            <!-- Stats content -->
-                                <HorizontalStackLayout>
-                                    <Label Text="Stats:" />
-                                    <Label Text="$X" x:Name="MoneyLabel" FontSize="12" TranslationX="75" TranslationY="3"/>
-                                </HorizontalStackLayout>
-                               
-                                <Label Text="Health" FontSize="12"/>
-                                <ProgressBar x:Name="HealthBar" Progress="0.65" />
-                                <Label Text="Mood" FontSize="12"/>
-                                <ProgressBar x:Name="HappyBar" Progress="0.35" />
-                                <Label Text="Hunger" FontSize="12"/>
-                                <ProgressBar x:Name="HungerBar" Progress="0.75" />
-                            </VerticalStackLayout>
-                        </VerticalStackLayout>
-
                     </VerticalStackLayout>
-                        
-                </Frame>
-                <!-- Right Box -->
-                <Frame
-                    BorderColor="#62c6f1"
-                    CornerRadius="5"
-                    Padding="10"
-                    BackgroundColor="#0094ff"
-                    MinimumWidthRequest="180"
-                    MaximumWidthRequest="180"
-                    MinimumHeightRequest="410"
-                    MaximumHeightRequest="410"
-                    HasShadow="False">
-            <VerticalStackLayout
-                    Padding="20,0"
-                    Spacing="10">
-                    <Label
+
+                </VerticalStackLayout>
+
+            </Frame>
+
+
+            <!-- Right Box -->
+            <Frame Grid.Column="1" Grid.Row="2" 
+        BorderColor="#62c6f1"
+        CornerRadius="5"
+        Padding="10"
+        BackgroundColor="#0094ff"
+        HasShadow="False" Margin="5">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
                         x:Name="weekLabel"
                         Text="Week&#x0a;X"
                         HorizontalTextAlignment="Center"
-                        SemanticProperties.HeadingLevel="Level2" />
-                        <Button x:Name="nextweekbtn" Text="Next Day" Clicked="OnNextWeekClicked"></Button>
-                        <Button x:Name="savebtn" Text="Save Game" Clicked="OnSaveClicked"></Button>
-                        <Button x:Name="loadbtn" Text="Load Game" Clicked="OnLoadClicked"></Button>
-                        <Button x:Name="newgamebtn" Text="New Game" Clicked="OnNewGameClicked"></Button>
-                    </VerticalStackLayout>
-                </Frame>
-            </HorizontalStackLayout>
-                
+                        SemanticProperties.HeadingLevel="Level2" FontSize="Large" />
 
-        </VerticalStackLayout>
+
+                    <Label Text="Stats:" Grid.Row="1" Grid.Column="0" />
+                    <Label Text="$X" x:Name="MoneyLabel" FontSize="12" Grid.Row="1" Grid.Column="2"/>
+
+
+
+                    <Label Text="Health" FontSize="12" Grid.Row="2" Grid.Column="0"  Margin="0, 5"/>
+                    <ProgressBar x:Name="HealthBar" Progress="0.65" Grid.Row="2" Grid.Column="2" Margin="0, 5"/>
+
+                    <Label Text="Mood" FontSize="12" Grid.Row="3" Grid.Column="0"  Margin="0, 5"/>
+                    <ProgressBar x:Name="HappyBar" Progress="0.35" Grid.Row="3" Grid.Column="2"  Margin="0, 5"/>
+
+                    <Label Text="Hunger" FontSize="12" Grid.Row="4" Grid.Column="0"  Margin="0, 5" />
+                    <ProgressBar x:Name="HungerBar" Progress="0.75"  Grid.Row="4" Grid.Column="2" />
+
+
+                    <Button x:Name="nextweekbtn" Text="Next Day" Clicked="OnNextWeekClicked" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" HorizontalOptions="Center" VerticalOptions="End"></Button>
+
+                </Grid>
+            </Frame>
+        </Grid>
     </ScrollView>
 
 </ContentPage>

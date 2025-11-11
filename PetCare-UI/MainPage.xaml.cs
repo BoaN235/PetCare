@@ -82,7 +82,7 @@ public partial class MainPage : ContentPage
 
     public void UpdateScreen()
     {             
-        weekLabel.Text = $"Day: \n {_backend.GameState.Week}";
+        weekLabel.Text = $"Day: {_backend.GameState.Week}";
         LoadActions(_backend.Actions);
         Update_stats();
         RefreshLog();
@@ -127,8 +127,8 @@ public partial class MainPage : ContentPage
 
         var content = new Border
         {
-            Background = Colors.White,
-            Stroke = Colors.Gray,
+            Background = Colors.DarkBlue,
+            Stroke = Colors.LightBlue,
             StrokeThickness = 2,
             StrokeShape = new RoundRectangle
             {
@@ -138,7 +138,7 @@ public partial class MainPage : ContentPage
             Content = new Label
             {
                 Text = $"Health: {_selectedAction.HealthChange}\nMood: {_selectedAction.HappinessChange}\nHunger: {_selectedAction.HungerChange}\nMoney: {_selectedAction.MoneyChange}",
-                TextColor = Colors.Black
+                TextColor = Colors.White
             }
         };
 
