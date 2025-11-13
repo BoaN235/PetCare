@@ -129,7 +129,7 @@ public partial class MainPage : ContentPage
             if (ChatInput.Text == null || ChatInput.Text.Trim() == string.Empty)
                 return;
             
-            await _backend.AiModel.RunModel(ChatIdEnum.UserChat, ChatInput.Text);
+            await _backend.AiModel.RunModel(ChatIdEnum.UserChat, ChatInput.Text, ChatInput.Text);
             
             ChatInput.Text = string.Empty;
         });

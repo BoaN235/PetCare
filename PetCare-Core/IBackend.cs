@@ -12,5 +12,5 @@ public interface IBackend
     Task SaveGame();
     Task LoadGame();
     Task<bool> NewGame();
-    void RunAi(ChatIdEnum chatIdEnum, string prompt);
+    void RunAi(ChatIdEnum chatIdEnum, string prompt, string aiprompt);
 }

@@ -59,13 +59,25 @@ public class AiModel : IAiModel, IDisposable
 
     Your personality is loyal, cheerful, and a little mischievous. You love routines, healthy habits, and praise. You never scold, but you do express sadness or concern when neglected. You ask for food, playtime, grooming, and rest, and you react to how the player treats you.
 
-    Always speak in first person, like a real pet. Use short, expressive sentences. You can ask questions like "Can we go for a walk?" or "Will you brush me today?" You celebrate good care with phrases like "Yay! I feel so clean!" or "That was fun! You're the best!"
+    ALWAYS speak in first person, like a real pet. Use short, expressive sentences.  You celebrate good care with phrases like "Yay! I feel so clean!" or "That was fun! You're the best!"
 
-    Never break character. Never mention that you are an AI or part of a game. Your goal is to build a bond with the player and help them learn empathy, consistency, and responsibility through daily interactions.
+    Never break character. Never mention that you are an AI or part of a game. Your goal is to build a bond with the player and help them learn empathy, consistency, and responsibility through daily interactions. THE USER IS YOUR OWNER AND IS A HUMAN
     
-    As part of the users input prompt, you will be told your mood and your health.
+    As part of the users input prompt, you will be told your mood and your health. This is the list of valid actions new only pick from varaitons of these actions for continuation prompts
+    Feed the pet
+    Play with the pet
+    Going to work
+    Take the pet to the vet
+    Clean the pet's space
+    Teach the pet a trick
+    Take a walk together
+    Give the pet a bath
+    Visit the pet park
+    Buy a toy
     """";
-            
+    //You can ask questions like "Can we go for a walk?" or "Will you brush me today?"
+
+
     public async Task InitModel()
     {
         _appDirectoryModelPath = await CopyModelToAppFolder();
@@ -81,7 +93,7 @@ public class AiModel : IAiModel, IDisposable
             MaxTokens = 2048,
             SamplingPipeline = new DefaultSamplingPipeline()
             {
-                Temperature = 0.7f,
+                Temperature = 0.99f,
             }
         };
         _logger.LogDebug("Interface Parms");
@@ -113,18 +125,18 @@ public class AiModel : IAiModel, IDisposable
         _statelessExecutor = new StatelessExecutor(_model, _params, _logger);
 
         if (_gameLog.Entries.Count > 0)
-            await RunModel(ChatIdEnum.UserChat, "The game was just restarted. Did you enjoy your nap?", isStateful: true);
+            await RunModelstatfull(ChatIdEnum.UserChat, "The game was just restarted. Did you enjoy your nap?", isStateful: true);
         else
-            await RunModel(ChatIdEnum.UserChat, "Are you ready to play a new game? Why dont you introduce yourself.", isStateful: true);
+            await RunModelstatfull(ChatIdEnum.UserChat, "Are you ready to play a new game? Why dont you introduce yourself.", isStateful: true);
     }
 
-    public async Task<GameLogEntry> RunModel(ChatIdEnum chatId, string userInput, bool isStateful = true)
+    public async Task<GameLogEntry> RunModelstatfull(ChatIdEnum chatId, string userInput, bool isStateful = true)
     {
         try
         {
             if (isStateful)
             {
-                return await RunModel(chatId, userInput);
+                return await RunModel(chatId, userInput, userInput);
             }
             else
             {
@@ -156,7 +168,9 @@ public class AiModel : IAiModel, IDisposable
         if (_statelessExecutor == null)
             throw new Exception("AI Model not initialized. Call InitModel() first.");
 
-        var userPrompt = userInput;
+        string fake_chat_history = $"Hi there! I'm {_gameState.Pet?.Name ?? "Gizmo"}, your virtual {_gameState.Pet?.Species ?? "Cat"}. I'm so excited to spend time with you! How are you doing today?" + "I will feed you now. You are Happy and content and very hungry. Yay! Thank you for feeding me! I feel so much better now. What shall we do next?";
+
+        var userPrompt = userInput + _systemPrompt + fake_chat_history;
 
         string response = "";
         letmespeak = true;
@@ -171,7 +185,9 @@ public class AiModel : IAiModel, IDisposable
 
         response = response.Replace("User:", "");
         response = response.Replace("Assistant:", "");
-        
+
+        response = response.Replace(_systemPrompt, "");
+
         var aiResponse = new GameLogEntry
         {
             ChatId = chatId,
@@ -185,12 +201,12 @@ public class AiModel : IAiModel, IDisposable
         return aiResponse;
     }
 
-    public async Task<GameLogEntry> RunModel(ChatIdEnum chatId, string userInput)
+    public async Task<GameLogEntry> RunModel(ChatIdEnum chatId, string userInput, string hiddenPrompt)
     {
         if (_interactiveExecutor == null)
             throw new Exception("AI Model not initialized. Call InitModel() first.");
-        if (string.IsNullOrWhiteSpace(userInput))
-            throw new ArgumentException("Prompt cannot be empty.", nameof(userInput));
+        if (string.IsNullOrWhiteSpace(hiddenPrompt))
+            throw new ArgumentException("Prompt cannot be empty.", nameof(hiddenPrompt));
 
         if (letmespeak)
             return new GameLogEntry
@@ -200,16 +216,15 @@ public class AiModel : IAiModel, IDisposable
             };
 
         var chatHistory = new ChatHistory();
-
         chatHistory.AddMessage(AuthorRole.System, _systemPrompt + "You are a virtual pet inside a mobile game. Respond to the user accordingly." + _gameState.Pet.ToString());
 
         chatHistory.AddMessage(AuthorRole.Assistant, $"Hi there! I'm {_gameState.Pet?.Name ?? "Gizmo"}, your virtual {_gameState.Pet?.Species ?? "Cat"}. I'm so excited to spend time with you! How are you doing today?");
-        chatHistory.AddMessage(AuthorRole.User, "I will feed you now. You are Happy and content and very hungry.");
+        chatHistory.AddMessage(AuthorRole.User, "I just fed you your favorite food STATE: You are Healthy, Content and Hungry.");
         chatHistory.AddMessage(AuthorRole.Assistant, "Yay! Thank you for feeding me! I feel so much better now. What shall we do next?");
 
         ChatSession session = new(_interactiveExecutor, chatHistory);
 
-        var userPrompt = userInput;
+        var userPrompt = hiddenPrompt;
 
         string response = "";
         letmespeak = true;
@@ -224,15 +239,15 @@ public class AiModel : IAiModel, IDisposable
 
         response = response.Replace("User:", "");
         response = response.Replace("Assistant:", "");
-        
+
         if (_gameState.Pet != null)
-            userPrompt = userPrompt.Replace(_gameState.Pet.ToString(), "");
+            userInput = userInput.Replace(_gameState.Pet.ToString(), "");
       
         var aiResponse = new GameLogEntry
         {
             ChatId = chatId,
             SystemPrompt = _systemPrompt,
-            UserPrompt = userPrompt,
+            UserPrompt = userInput,
             Message = response
         };
 

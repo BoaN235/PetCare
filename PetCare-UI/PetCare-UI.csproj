@@ -85,6 +85,7 @@
 
 	<ItemGroup>
 	  <MauiAsset Remove="Resources\Raw\qwen25-3b-instruct-q6_k.gguf" />
+	  <MauiAsset Remove="Resources\Raw\qwen2_5_3b-chat-q8_0.gguf" />
 	  <MauiAsset Remove="Resources\Raw\WeekPrompt.txt" />
 	</ItemGroup>
 

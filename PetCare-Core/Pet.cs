@@ -70,7 +70,7 @@ public class Pet
     {
         var sb = new System.Text.StringBuilder();
         
-        sb.Append($"You are {HealthText} and {HappinessText} and {HungerText}.");
+        sb.Append($" STATE: You are {HealthText} and {HappinessText} and {HungerText}.");
         
         return sb.ToString();
     }

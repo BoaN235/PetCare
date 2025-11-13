@@ -73,7 +73,7 @@ public class Backend : IBackend
         return true;
     }
 
-    public async void RunAi(ChatIdEnum chatIdEnum, string prompt)
+    public async void RunAi(ChatIdEnum chatIdEnum, string prompt, string aiprompt)
     {
         prompt = prompt + GameState.Pet.ToString();
         
@@ -81,7 +81,7 @@ public class Backend : IBackend
         
         await Task.Run(async () =>
         {
-            var result = await AiModel.RunModel(chatIdEnum, prompt);
+            var result = await AiModel.RunModel(chatIdEnum, prompt, aiprompt);
             
             Debug.Write("Done Running AI");
         });
@@ -93,6 +93,6 @@ public class Backend : IBackend
         
         Debug.Write("Running AI for " + action.AiPrompt);
         
-        RunAi(ChatIdEnum.GameMessageLog, action.AiPrompt);
+        RunAi(ChatIdEnum.GameMessageLog, action.Text, action.AiPrompt);
     }
 }
