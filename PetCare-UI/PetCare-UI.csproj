@@ -84,6 +84,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiAsset Remove="Resources\Raw\qwen25-3b-instruct-q6_k.gguf" />
+	  <MauiAsset Remove="Resources\Raw\WeekPrompt.txt" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <None Remove="Platforms\Android\lib\arm64-v8a\libllama.so" />
 	  <None Remove="Resources\AppIcon\appiconfg.svg" />
 	  <None Remove="Resources\Raw\qwen1_5-0_5b-chat-q8_0.gguf" />
@@ -112,6 +117,15 @@
 		<ProjectReference Include="..\PetCare-AI\PetCare-AI.csproj" />
 		<ProjectReference Include="..\PetCare-BE\PetCare-BE.csproj" />
 		<ProjectReference Include="..\PetCare-Core\PetCare-Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiAsset Update="Resources\Raw\qwen1_5-0_5b-chat-q8_0.gguf">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </MauiAsset>
+	  <None Update="Resources\Raw\qwen25-3b-instruct-q6_k.gguf">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
-namespace PetCare.Core;
+﻿namespace PetCare.Core;
 
 public interface IGameStateData
 {

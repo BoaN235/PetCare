@@ -10,9 +10,6 @@ public partial class App : Application
 
         Task.Run(async () =>
         {
-            var aiModel = serviceProvider.GetService<IAiModel>() ?? throw new Exception("Ai Model cannot load");
-            await aiModel.InitModel();
-
             var backEnd = serviceProvider.GetService<IBackend>() ?? throw new Exception("Backend cannot load");
             await backEnd.Initialize();
             await backEnd.LoadGame();
