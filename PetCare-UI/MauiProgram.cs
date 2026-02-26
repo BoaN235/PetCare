@@ -108,6 +108,7 @@ public static class MauiProgram
                 // Register default font files for consistent typography across platforms
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                fonts.AddFont("Conthrax-SemiBold.otf", "ContraxFont");
             });
         
         #endregion
