@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+         x:Class="PetCare.UI.LoadingPage"
+       Title="Loading">
+
+    <!-- Gradient resources -->
+    <ContentPage.Resources>
+        <!-- Subtle gradient background - dark blue-gray to slightly lighter blue -->
+        <LinearGradientBrush x:Key="BackgroundGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#222831" Offset="0.0" />
+  <GradientStop Color="#2a3142" Offset="1.0" />
+        </LinearGradientBrush>
+  </ContentPage.Resources>
+
+  <!-- Main container with gradient background -->
+    <Grid Background="{StaticResource BackgroundGradient}" Padding="0">
+        <!-- Centered loading content -->
+        <VerticalStackLayout 
+            HorizontalOptions="Center"
+        VerticalOptions="Center"
+          Spacing="20">
+
+  <!-- Loading text in Contrax font -->
+       <Label
+   Text="Loading"
+        FontFamily="ContraxFont"
+       FontSize="48"
+         TextColor="#EEEEEE"
+         HorizontalOptions="Center"
+    FontAttributes="Bold" />
+          
+  <!-- Activity indicator for loading animation -->
+       <ActivityIndicator
+     IsRunning="True"
+    IsVisible="True"
+      Color="#62c6f1"
+        Scale="1.5"
+   HorizontalOptions="Center" />
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

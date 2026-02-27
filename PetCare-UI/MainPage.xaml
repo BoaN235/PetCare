@@ -28,6 +28,18 @@
 
     <!-- Global styling resources for consistent UI appearance across all controls -->
     <ContentPage.Resources>
+        <!-- Subtle gradient background - dark blue-gray to slightly lighter blue -->
+        <LinearGradientBrush x:Key="BackgroundGradient" StartPoint="0,0" EndPoint="1,1">
+       <GradientStop Color="#222831" Offset="0.0" />
+ <GradientStop Color="#2a3142" Offset="1.0" />
+        </LinearGradientBrush>
+        
+        <!-- Very subtle body gradient - barely noticeable difference -->
+   <LinearGradientBrush x:Key="BodyGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#252a39" Offset="0.0" />
+            <GradientStop Color="#2B344A" Offset="1.0" />
+        </LinearGradientBrush>
+        
         <!-- Default label styling - light blue text for readability on dark background -->
         <Style TargetType="Label">
             <Setter Property="TextColor" Value="#EEEEEE" />
@@ -61,11 +73,11 @@
     </ContentPage.Resources>
 
     <!-- Main scrollable container to handle overflow on smaller screens -->
-    <ScrollView>
-        <!-- Primary layout grid with dark background theme -->
+    <ScrollView Background="{StaticResource BodyGradient}">
+        <!-- Primary layout grid with subtle gradient background theme -->
         <Grid
             Padding="10,10" 
-            BackgroundColor="#222831">
+            Background="{StaticResource BackgroundGradient}">
             <Grid.RowDefinitions>
                 <!-- Header row for game controls - auto-sized based on content -->
                 <RowDefinition Height="Auto"/>
