@@ -28,44 +28,56 @@
 
     <!-- Global styling resources for consistent UI appearance across all controls -->
     <ContentPage.Resources>
+        <!-- Subtle gradient background - dark blue-gray to slightly lighter blue -->
+        <LinearGradientBrush x:Key="BackgroundGradient" StartPoint="0,0" EndPoint="1,1">
+       <GradientStop Color="#222831" Offset="0.0" />
+ <GradientStop Color="#2a3142" Offset="1.0" />
+        </LinearGradientBrush>
+        
+        <!-- Very subtle body gradient - barely noticeable difference -->
+   <LinearGradientBrush x:Key="BodyGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#252a39" Offset="0.0" />
+            <GradientStop Color="#2B344A" Offset="1.0" />
+        </LinearGradientBrush>
+        
         <!-- Default label styling - light blue text for readability on dark background -->
         <Style TargetType="Label">
-            <Setter Property="TextColor" Value="#ADD7F6" />
+            <Setter Property="TextColor" Value="#EEEEEE" />
         </Style>
         
         <!-- Button styling - dark blue background with light blue text and borders -->
         <Style TargetType="Button">
-            <Setter Property="Background" Value="DarkBlue" />
-            <Setter Property="TextColor" Value="#ADD7F6" />
+            <Setter Property="Background" Value="#393E46" />
+            <Setter Property="TextColor" Value="#EEEEEE" />
             <Setter Property="BorderColor" Value="#62c6f1" />
             <Setter Property="LineBreakMode" Value="WordWrap" />
         </Style>
         
         <!-- Progress bar styling for pet statistics (Health, Mood, Hunger) -->
         <Style TargetType="ProgressBar">
-            <Setter Property="ProgressColor" Value="#87BFFF" />
+            <Setter Property="ProgressColor" Value="#62c6f1" />
             <Setter Property="BackgroundColor" Value="Transparent" />
         </Style>
         
         <!-- Text entry field styling for user input -->
         <Style TargetType="Entry">
-            <Setter Property="PlaceholderColor" Value="#ADD7F6" />
-            <Setter Property="TextColor" Value="#ADD7F6" />
+            <Setter Property="PlaceholderColor" Value="#EEEEEE" />
+            <Setter Property="TextColor" Value="#EEEEEE" />
         </Style>
         
         <!-- Frame styling for content containers throughout the UI -->
         <Style TargetType="Frame">
-            <Setter Property="Background" Value="#2667FF" />
-            <Setter Property="BorderColor" Value="#3F8EFC" />
+            <Setter Property="Background" Value="#393E46" />
+            <Setter Property="BorderColor" Value="#393E46" />
         </Style>
     </ContentPage.Resources>
 
     <!-- Main scrollable container to handle overflow on smaller screens -->
-    <ScrollView>
-        <!-- Primary layout grid with dark background theme -->
+    <ScrollView Background="{StaticResource BodyGradient}">
+        <!-- Primary layout grid with subtle gradient background theme -->
         <Grid
             Padding="10,10" 
-            BackgroundColor="#1C1F33">
+            Background="{StaticResource BackgroundGradient}">
             <Grid.RowDefinitions>
                 <!-- Header row for game controls - auto-sized based on content -->
                 <RowDefinition Height="Auto"/>
@@ -83,14 +95,17 @@
 
             <!-- HEADER SECTION: Game title and control buttons -->
             <!-- Spans both columns in the top row for full-width header -->
-            <Frame Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="5" Padding="10">
+            <Frame Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="5" Padding="10" BackgroundColor="#393E46" BorderColor="#62c6f1">
                 <VerticalStackLayout>
                     <!-- Main game title with semantic heading for accessibility -->
                     <Label
-                        Text="Pet Care GPT"
+                        Text="Cyber Critter Care"
                         Style="{StaticResource Headline}"
-                        TextColor="White"
-                        SemanticProperties.HeadingLevel="Level1" />
+                        TextColor="#EEEEEE"
+                        FontSize="28"
+                        FontAttributes="Bold"
+                        SemanticProperties.HeadingLevel="Level1" 
+                        FontFamily="ContraxFont"/>
                     
                     <!-- Horizontal button group for game state management -->
                     <HorizontalStackLayout
@@ -114,7 +129,7 @@
                 BorderColor="#62c6f1"
                 CornerRadius="5"
                 Padding="10"
-                BackgroundColor="#0094ff"
+                BackgroundColor="#393E46"
                 HasShadow="False" Margin="5">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -128,7 +143,7 @@
                     <Frame 
                         BorderColor="#62c6f1"
                         CornerRadius="5"
-                        BackgroundColor="Transparent"
+                        BackgroundColor="#393E46"
                         Padding="0"
                         Grid.Row="0">
                         <!-- Limited height scroll view to prevent excessive scrolling -->
@@ -177,7 +192,7 @@
                 BorderColor="#62c6f1"
                 CornerRadius="5"
                 Padding="10"
-                BackgroundColor="#0094ff"
+                BackgroundColor="#393E46"
                 HasShadow="False" Margin="5">
                 <VerticalStackLayout Spacing="10">
 
@@ -191,7 +206,7 @@
                     <Frame 
                         BorderColor="#62c6f1"
                         CornerRadius="5"
-                        BackgroundColor="Transparent"
+                        BackgroundColor="#393E46"
                         Padding="0">
                         <!-- Fixed height scroll area for consistent layout -->
                         <ScrollView 
@@ -220,7 +235,7 @@
                 BorderColor="#62c6f1"
                 CornerRadius="5"
                 Padding="10"
-                BackgroundColor="#0094ff"
+                BackgroundColor="#393E46"
                 HasShadow="False" Margin="5">
                 <Grid>
                     <Grid.RowDefinitions>

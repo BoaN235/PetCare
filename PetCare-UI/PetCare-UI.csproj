@@ -21,7 +21,7 @@
 		<Nullable>enable</Nullable>
 
 		<!-- Display name -->
-		<ApplicationTitle>PetCare</ApplicationTitle>
+		<ApplicationTitle>Cyber Critter Care</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId>com.companyname.petcareui</ApplicationId>
@@ -124,6 +124,9 @@
 	  <MauiAsset Update="Resources\Raw\qwen1_5-0_5b-chat-q8_0.gguf">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </MauiAsset>
+	  <MauiXaml Update="LoadingPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <None Update="Resources\Raw\qwen25-3b-instruct-q6_k.gguf">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </None>
