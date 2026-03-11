@@ -1,12 +1,14 @@
-﻿using Microsoft.Maui.Controls.Shapes;
+﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Extensions;
+using CommunityToolkit.Maui.Views;
+using Microsoft.Maui;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Controls.Shapes;
 using PetCare.BE;
 using PetCare.Core;
 using PetCare.UI.Behaviors;
 using System.Data;
 using System.Timers;
-using CommunityToolkit.Maui.Views;
-using CommunityToolkit.Maui.Extensions;
-using CommunityToolkit.Maui;
 
 namespace PetCare.UI;
 
@@ -153,6 +155,47 @@ public partial class MainPage : ContentPage
         {
             await _backend.LoadGame();
             
+            UpdateScreen();
+        });
+    }
+
+    async void DisplayTutorialbtnClicked(PlayerAction action)
+    {
+        _selectedAction = action;
+
+        var content = new Border
+        {
+            Background = Colors.DarkBlue,
+            Stroke = Colors.LightBlue,
+            StrokeThickness = 2,
+            StrokeShape = new RoundRectangle
+            {
+                CornerRadius = new CornerRadius(20)
+            },
+            Padding = 30,
+            Content = new Label
+            {
+                Text = $"Health: {_selectedAction.HealthChange}\n" +
+                       $"Mood: {_selectedAction.HappinessChange}\n" +
+                       $"Hunger: {_selectedAction.HungerChange}\n" +
+                       $"Money: {_selectedAction.MoneyChange}",
+                TextColor = Colors.White
+            }
+        };
+
+        await this.ShowPopupAsync(content, new PopupOptions
+        {
+            CanBeDismissedByTappingOutsideOfPopup = true,
+            PageOverlayColor = Colors.Black.MultiplyAlpha(0.4f)
+        });
+    }
+
+    private async void OnTutorialClicked(object? sender, EventArgs e)
+    {
+        await _debouncer.Handle(async () =>
+        {
+            DisplayTutorialbtnClicked();
+
             UpdateScreen();
         });
     }

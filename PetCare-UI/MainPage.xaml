@@ -102,6 +102,8 @@
                         <Button x:Name="loadbtn" Text="Load Game" Clicked="OnLoadClicked" Margin="2,2"></Button>
                         <!-- Save current game state to device storage -->
                         <Button x:Name="savebtn" Text="Save Game" Clicked="OnSaveClicked" Margin="2,2"></Button>
+                        <!-- do tutorial stuff -->
+                        <Button x:Name="tutorialbtn" Text="Tutorial" Clicked="OnTutorialClicked" Margin="2,2"></Button>
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
             </Frame>
